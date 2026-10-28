@@ -12,7 +12,7 @@
 
         <form th:object="${expenseForm}"
               th:action="${expenseForm.editMode} ? @{/expenses/{id}(id=${expenseForm.expenseId})} : @{/expenses}"
-              method="post" class="card app-card">
+              method="post" class="card app-card" novalidate>
             <div class="card-body p-4">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" th:field="*{expenseId}">
