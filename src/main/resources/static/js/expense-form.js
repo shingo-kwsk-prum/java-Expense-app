@@ -27,10 +27,7 @@
         if (!button) {
             return;
         }
-        const rows = container.querySelectorAll('.detail-row');
-        if (rows.length <= 1) {
-            return;
-        }
+        
         button.closest('.detail-row').remove();
         reindexRows();
     });
