@@ -144,7 +144,7 @@
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                             <input type="hidden" name="version" th:value="${expense.version}">
                             <button type="submit" class="btn btn-primary w-100"
-                                    th:disabled="${#lists.isEmpty(expense.details)}">
+                                    th:disabled="${#lists.isEmpty(expense.details) or #lists.isEmpty(expense.receiptImages)}">
                                 <i class="bi bi-send me-1"></i><span th:text="#{common.submit}">申請</span>
                             </button>
                             <p class="text-muted small mb-0 mt-2"
