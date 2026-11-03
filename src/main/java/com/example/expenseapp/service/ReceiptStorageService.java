@@ -102,6 +102,24 @@ public class ReceiptStorageService {
         if (expenseId == null) {
             return;
         }
+
+        Path expenseDir = receiptBaseDir.resolve(String.valueOf(expenseId)).normalize();
+        if (!expenseDir.startsWith(receiptBaseDir) || !Files.isDirectory(expenseDir)) {
+            return;
+        }
+
+        try (Stream<Path> files = Files.list(expenseDir)) {
+            files.filter(Files::isRegularFile).forEach(file -> {
+                try {
+                    Files.deleteIfExists(file);
+                } catch (IOException e) {
+                    throw new IllegalStateException("領収書ファイルの削除に失敗しました", e);
+                }
+            });
+            Files.deleteIfExists(expenseDir);
+        } catch (IOException e) {
+            throw new IllegalStateException("領収書フォルダの削除に失敗しました", e);
+        }
     }
 
     private boolean matchesSignature(byte[] content, String extension) {
