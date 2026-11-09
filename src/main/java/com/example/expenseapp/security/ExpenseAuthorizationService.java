@@ -45,7 +45,9 @@ public class ExpenseAuthorizationService {
             return false;
         }
         Integer deptId = expense.getApplicant().getDeptId();
-        return matchesCurrentStep(deptId, expenseId, loginUser, false);
+        return approvalRouteMapper.findByDeptIdOrderByStep(deptId)
+            .stream()
+            .anyMatch(route -> loginUser.getUserId().equals(route.getApproverUserId()));
     }
 
     public boolean canEdit(Integer expenseId, LoginUser loginUser) {
