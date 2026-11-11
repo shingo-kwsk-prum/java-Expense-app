@@ -93,6 +93,9 @@ public class ApprovalController {
             @Valid @ModelAttribute("approvalForm") ApprovalForm approvalForm,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+        if (approvalForm.getComment() == null || approvalForm.getComment().isBlank()) {
+            bindingResult.rejectValue("comment", "required", "コメントを入力してください");
+        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.approvalForm", bindingResult);
             redirectAttributes.addFlashAttribute("approvalForm", approvalForm);
