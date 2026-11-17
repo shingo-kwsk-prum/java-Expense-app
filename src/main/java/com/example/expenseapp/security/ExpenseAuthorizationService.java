@@ -80,20 +80,6 @@ public class ExpenseAuthorizationService {
         return expenseMapper.findAccessibleByApprover(expenseId, loginUser.getUserId()).isPresent();
     }
 
-    public boolean isUpcomingApprover(Integer expenseId, LoginUser loginUser) {
-        if (expenseId == null || loginUser == null || !loginUser.isApprover()) {
-            return false;
-        }
-        Expense expense = expenseMapper.findAccessibleByApprover(expenseId, loginUser.getUserId()).orElse(null);
-        if (expense == null || !expense.getStatus().isPending()) {
-            return false;
-        }
-        if (expense.getApplicant() == null || expense.getApplicant().getDeptId() == null) {
-            return false;
-        }
-        return matchesCurrentStep(expense.getApplicant().getDeptId(), expenseId, loginUser, true);
-    }
-
     private boolean matchesCurrentStep(
             Integer deptId,
             Integer expenseId,
