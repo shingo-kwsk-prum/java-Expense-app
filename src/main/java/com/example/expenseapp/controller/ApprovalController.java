@@ -49,15 +49,15 @@ public class ApprovalController {
     }
 
     @GetMapping("/{expenseId}")
-    @PreAuthorize("@expenseAuthorizationService.isRouteMember(#expenseId, authentication.principal)")
+    @PreAuthorize("@expenseAuthorizationService.canView(#expenseId, authentication.principal)")
     public String detail(
             @PathVariable Integer expenseId,
             @AuthenticationPrincipal LoginUser loginUser,
             Model model) {
         var expense = approvalService.getExpenseForApprover(expenseId, loginUser);
         model.addAttribute("expense", expense);
-        model.addAttribute("canApprove", expense.getStatus().isPending()
-                && expenseAuthorizationService.isRouteMember(expenseId, loginUser));
+        model.addAttribute("canApprove",
+                expenseAuthorizationService.canApprove(expenseId, loginUser));
         if (!model.containsAttribute("approvalForm")) {
             model.addAttribute("approvalForm", new ApprovalForm(expense.getVersion()));
         }
