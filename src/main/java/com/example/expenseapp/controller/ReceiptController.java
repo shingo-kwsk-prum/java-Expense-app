@@ -8,6 +8,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class ReceiptController {
     }
 
     @GetMapping("/expenses/{expenseId}/receipts/{imageId}")
+    @PreAuthorize("@expenseAuthorizationService.canView(#expenseId, authentication.principal)")
     public ResponseEntity<Resource> showReceipt(
             @PathVariable Integer expenseId,
             @PathVariable Integer imageId) throws Exception {
