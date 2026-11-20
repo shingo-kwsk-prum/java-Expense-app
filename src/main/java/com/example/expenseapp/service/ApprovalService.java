@@ -90,7 +90,7 @@ public class ApprovalService {
                 ? ExpenseStatus.APPROVED
                 : ExpenseStatus.PENDING;
         expense.setStatus(newStatus);
-        assertUpdated(expenseMapper.updateById(expense));
+        assertUpdated(expenseMapper.updateWithVersion(expense));
 
         return loadAccessibleExpense(expenseId, approver.getUserId());
     }
@@ -107,7 +107,7 @@ public class ApprovalService {
                 normalizeComment(comment));
 
         expense.setStatus(ExpenseStatus.REJECTED);
-        assertUpdated(expenseMapper.updateById(expense));
+        assertUpdated(expenseMapper.updateWithVersion(expense));
 
         return loadAccessibleExpense(expenseId, approver.getUserId());
     }
@@ -123,6 +123,11 @@ public class ApprovalService {
         if (!expense.getStatus().isPending()) {
             throw new InvalidExpenseStateException(expense.getStatus(), "expense.operation.approve");
         }
+
+        if (version == null || !version.equals(expense.getVersion())) {
+            throw new OptimisticLockException();
+        }
+
         return expense;
     }
 
