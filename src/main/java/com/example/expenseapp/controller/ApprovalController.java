@@ -65,7 +65,7 @@ public class ApprovalController {
     }
 
     @PostMapping("/{expenseId}/approve")
-    @PreAuthorize("@expenseAuthorizationService.isRouteMember(#expenseId, authentication.principal)")
+    @PreAuthorize("@expenseAuthorizationService.canApprove(#expenseId, authentication.principal)")
     public String approve(
             @PathVariable Integer expenseId,
             @AuthenticationPrincipal LoginUser loginUser,
@@ -86,7 +86,7 @@ public class ApprovalController {
     }
 
     @PostMapping("/{expenseId}/reject")
-    @PreAuthorize("@expenseAuthorizationService.isRouteMember(#expenseId, authentication.principal)")
+    @PreAuthorize("@expenseAuthorizationService.canApprove(#expenseId, authentication.principal)")
     public String reject(
             @PathVariable Integer expenseId,
             @AuthenticationPrincipal LoginUser loginUser,
